@@ -44,6 +44,7 @@ public class Player : KinematicBody2D
         if (NewAnim != Anim)
         {
             Anim = NewAnim;
+            //GD.Print(Anim);
             GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
         }
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
@@ -63,16 +64,16 @@ public class Player : KinematicBody2D
         switch (CurrentState)
         {
             case State.IDLE:
-                Anim = "idle";
+                NewAnim = "idle";
                 break;
             case State.RUN:
-                Anim = "run";
+                NewAnim = "run";
                 break;
             case State.HURT:
-                Anim = "hurt";
+                NewAnim = "hurt";
                 break;
             case State.JUMP:
-                Anim = "jump_up";
+                NewAnim = "jump_up";
                 break;
             case State.DEAD:
                 Hide();
@@ -92,6 +93,8 @@ public class Player : KinematicBody2D
         KeyRight = Input.IsActionPressed("ui_right");
         KeyLeft = Input.IsActionPressed("ui_left");
         KeyJump = Input.IsActionPressed("ui_jump");
+
+        Velocity = new Vector2(0, Velocity.y);
 
         if (KeyRight)
         {
