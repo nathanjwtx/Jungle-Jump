@@ -98,6 +98,10 @@ RunSpeed = 150
 JumpSpeed = -300
 Gravity = 750
 
+[node name="Invulnerability" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 hframes = 19
@@ -118,3 +122,4 @@ anims/run = SubResource( 6 )
 current = true
 zoom = Vector2( 0.4, 0.4 )
 
+[connection signal="timeout" from="Invulnerability" to="." method="_on_Invulnerability_timeout"]

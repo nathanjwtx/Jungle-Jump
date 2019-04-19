@@ -11,27 +11,35 @@ public class Player : KinematicBody2D
     [Export]
     public int Gravity;
 
+    [Signal]
+    delegate void LifeChanged();
+    [Signal]
+    delegate void Dead();
+
+
     public enum State
     { IDLE, RUN, JUMP, HURT, DEAD };
 
-    private State _currentState;
-    private string _anim;
-    private string _newAnim;
-    private Vector2 _velocity;
-    private bool _keyRight;
-    private bool _keyLeft;
-    private bool _keyJump;
-
-    public string NewAnim { get => _newAnim; set => _newAnim = value; }
-    public string Anim { get => _anim; set => _anim = value; }
-    public State CurrentState { get => _currentState; set => _currentState = value; }
-    public Vector2 Velocity { get => _velocity; set => _velocity = value; }
-    public bool KeyRight { get => _keyRight; set => _keyRight = value; }
-    public bool KeyLeft { get => _keyLeft; set => _keyLeft = value; }
-    public bool KeyJump { get => _keyJump; set => _keyJump = value; }
+    public string NewAnim { get; set; }
+    public string Anim { get; set; }
+    public State CurrentState { get; set; }
+    public Vector2 Velocity { get; set; }
+    public bool KeyRight { get; set; }
+    public bool KeyLeft { get; set; }
+    public bool KeyJump { get; set; }
+    public int Life { get; set; }
 
     public override void _Ready()
     {
+        ChangeState(State.IDLE);
+    }
+
+    public void Start(Vector2 startPos)
+    {
+        Life = 3;
+        EmitSignal("LifeChanged", Life);
+        Position = startPos;
+        Show();
         ChangeState(State.IDLE);
     }
 
@@ -58,7 +66,7 @@ public class Player : KinematicBody2D
         }
     }
 
-    public void ChangeState(State newState)
+    public async void ChangeState(State newState)
     {
         CurrentState = newState;
         switch (CurrentState)
@@ -71,11 +79,22 @@ public class Player : KinematicBody2D
                 break;
             case State.HURT:
                 NewAnim = "hurt";
+                Velocity = new Vector2(-100 * Mathf.Sign(Velocity.x), -200);
+                Life -= 1;
+                EmitSignal("LifeChanged", Life);
+                Timer invTimer = GetNode<Timer>("Invulnerability");
+                await ToSignal(invTimer, "timeout");
+                ChangeState(State.IDLE);
+                if (Life <=0)
+                {
+                    ChangeState(State.DEAD);
+                }
                 break;
             case State.JUMP:
                 NewAnim = "jump_up";
                 break;
             case State.DEAD:
+                EmitSignal("Dead");
                 Hide();
                 break;
             default:
@@ -126,4 +145,18 @@ public class Player : KinematicBody2D
             ChangeState(State.JUMP);
         }
     }
+
+    private void Hurt()
+    {
+        if (CurrentState != State.HURT)
+        {
+            ChangeState(State.HURT);
+        }
+    }
+
+    private void _on_Invulnerability_timeout()
+    {
+        // Replace with function body.
+    }
 }
+
