@@ -4,12 +4,12 @@
 
 [node name="Level" index="0" instance=ExtResource( 1 )]
 
-[node name="World" parent="." index="0"]
+[node name="World" parent="." index="1"]
 tile_data = PoolIntArray( -131071, 4, 0, -131070, 3, 0, -131069, 3, 0, -131068, 3, 0, -131067, 3, 0, -131066, 5, 0, -131063, 4, 0, -131062, 7, 0, -65524, 7, 0, 14, 3, 0, 15, 1, 0, 16, 1, 0, 17, 1, 0, 18, 1, 0, 131064, 4, 0, 131065, 3, 0, 131066, 2, 0, 131067, 1, 0, 131068, 3, 0, 131069, 3, 0, 131070, 5, 0 )
 
-[node name="Objects" parent="." index="2"]
+[node name="Objects" parent="." index="3"]
 tile_data = PoolIntArray( -524288, 3, 0 )
 
-[node name="Pickups" parent="." index="3"]
+[node name="Pickups" parent="." index="4"]
 tile_data = PoolIntArray( -196603, 8, 0 )
 
