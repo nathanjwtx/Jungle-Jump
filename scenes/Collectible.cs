@@ -12,12 +12,13 @@ public class Collectible : Area2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Textures.Add("cherry", "res://assets/sprites/cherry.png");
-        Textures.Add("gem", "res://assets/sprites/gem.png");
+        CreateSpriteDict();
     }
 
     public void Init(string type, Vector2 pos)
     {
+        CreateSpriteDict();
+//        GD.Print(GetParent().GetName());
         GetNode<Sprite>("Sprite").Texture = GD.Load<Texture>(Textures[type]);
         Position = pos;
     }
@@ -27,11 +28,15 @@ public class Collectible : Area2D
         EmitSignal("Pickup");
         QueueFree();
     }
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+
+    private void CreateSpriteDict()
+    {
+        if (Textures.Count == 0)
+        {
+            Textures.Add("cherry", "res://assets/sprites/cherry.png");
+            Textures.Add("gem", "res://assets/sprites/gem.png");
+        }
+    }
 }
 
 
