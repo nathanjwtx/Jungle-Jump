@@ -75,6 +75,11 @@ public class Player : KinematicBody2D
                     Hurt();
                 }
             }
+
+            if (colliderType.ToString() == "Enemy")
+            {
+                
+            }
         }
 
         if (CurrentState == State.JUMP && IsOnFloor())

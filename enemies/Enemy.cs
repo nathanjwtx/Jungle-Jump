@@ -51,9 +51,19 @@ public class Enemy : KinematicBody2D
         }
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    private void TakeDamage()
+    {
+        GetNode<AnimationPlayer>("AnimationPlayer").Play("death");
+        GetNode<CollisionShape2D>("CollisionShape2D").Disabled = true;
+        SetPhysicsProcess(false);
+    }
+
+    private void _on_AnimationPlayer_animation_finished(string animName)
+    {
+        if (animName == "death")
+        {
+            QueueFree();
+        }
+    }
 }
+
