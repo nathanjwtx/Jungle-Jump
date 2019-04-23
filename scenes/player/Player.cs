@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static Godot.GD;
 
 public class Player : KinematicBody2D
 {
@@ -56,6 +57,22 @@ public class Player : KinematicBody2D
             GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
         }
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+        if (CurrentState == State.HURT)
+        {
+            return;
+        }
+
+        for (int i = 0; i < GetSlideCount(); i++)
+        {
+            var collision = GetSlideCollision(i);
+            var colliderType = collision.GetCollider();
+            TileMap t = (TileMap) colliderType;
+            if (t.Name == "Danger")
+            {
+                Hurt();
+            }
+        }
+
         if (CurrentState == State.JUMP && IsOnFloor())
         {
             ChangeState(State.IDLE);
@@ -83,6 +100,7 @@ public class Player : KinematicBody2D
                 Life -= 1;
                 EmitSignal("LifeChanged", Life);
                 Timer invTimer = GetNode<Timer>("Invulnerability");
+                invTimer.Start();
                 await ToSignal(invTimer, "timeout");
                 ChangeState(State.IDLE);
                 if (Life <=0)
@@ -156,7 +174,7 @@ public class Player : KinematicBody2D
 
     private void _on_Invulnerability_timeout()
     {
-        // Replace with function body.
+        ChangeState(State.IDLE);
     }
 }
 
