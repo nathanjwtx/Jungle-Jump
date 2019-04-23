@@ -66,10 +66,14 @@ public class Player : KinematicBody2D
         {
             var collision = GetSlideCollision(i);
             var colliderType = collision.GetCollider();
-            TileMap t = (TileMap) colliderType;
-            if (t.Name == "Danger")
+            
+            if (colliderType.ToString() == "Godot.TileMap")
             {
-                Hurt();
+                TileMap t = (TileMap) colliderType;
+                if (t.Name == "Danger")
+                {
+                    Hurt();
+                }
             }
         }
 
