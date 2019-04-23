@@ -8,18 +8,19 @@ public class Enemy : KinematicBody2D
 
     public Vector2 Velocity { get; private set; }
     private int Facing { get; set; }
+    private float NewY { get; set; }
 
     public override void _Ready()
     {
-        
+        Facing = 1;
     }
 
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
         GetNode<Sprite>("Sprite").FlipH = Velocity.x > 0;
-        float newY = Velocity.y + Gravity * delta;
-        Velocity = new Vector2(Facing * Speed, newY);
+        NewY += Velocity.y + Gravity * delta;
+        Velocity = new Vector2(Facing * Speed, NewY);
 
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
         for (int i = 0; i < GetSlideCount(); i++)
