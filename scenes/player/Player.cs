@@ -164,7 +164,7 @@ public class Player : KinematicBody2D
         }
     }
 
-    private void Hurt()
+    public void Hurt()
     {
         if (CurrentState != State.HURT)
         {

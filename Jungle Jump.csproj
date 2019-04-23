@@ -49,6 +49,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enemies\Enemy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="scenes\Collectible.cs" />
     <Compile Include="scenes\levels\Level.cs" />
