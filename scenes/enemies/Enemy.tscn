@@ -1,7 +1,8 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://enemies/Enemy.cs" type="Script" id=1]
+[ext_resource path="res://scenes/enemies/Enemy.cs" type="Script" id=1]
 [ext_resource path="res://assets/sprites/opossum.png" type="Texture" id=2]
+
 
 [sub_resource type="Animation" id=3]
 resource_name = "death"
