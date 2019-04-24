@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/enemies/Enemy.cs" type="Script" id=1]
-[ext_resource path="res://assets/sprites/enemy-death.png" type="Texture" id=2]
-[ext_resource path="res://assets/sprites/opossum.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/opossum.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/enemy-death.png" type="Texture" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "death"
@@ -30,7 +30,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2, 0.25 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ) ]
+"values": [ ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ) ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -58,13 +58,13 @@ tracks/1/keys = {
 "times": PoolRealArray( 0.00337313, 0.1, 0.2, 0.3, 0.4, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ) ]
+"values": [ ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 14.7376, 8.72652 )
 
-[node name="KinematicBody2D" type="KinematicBody2D" groups=[
+[node name="Enemy" type="KinematicBody2D" groups=[
 "enemies",
 ]]
 collision_layer = 4

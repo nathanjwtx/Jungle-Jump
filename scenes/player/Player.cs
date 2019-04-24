@@ -53,7 +53,6 @@ public class Player : KinematicBody2D
         if (NewAnim != Anim)
         {
             Anim = NewAnim;
-            //GD.Print(Anim);
             GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
         }
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
@@ -64,10 +63,9 @@ public class Player : KinematicBody2D
 
         for (int i = 0; i < GetSlideCount(); i++)
         {
-            var collision = GetSlideCollision(i);
-            var colliderType = collision.GetCollider();
+            var colliderType = GetSlideCollision(i).GetCollider();
             
-            if (colliderType.ToString() == "Godot.TileMap")
+            if (colliderType is TileMap)
             {
                 TileMap t = (TileMap) colliderType;
                 if (t.Name == "Danger")
@@ -76,9 +74,35 @@ public class Player : KinematicBody2D
                 }
             }
 
-            if (colliderType.ToString() == "Enemy")
+            if (colliderType is Enemy)
             {
-                
+                RectangleShape2D playerExtentY = new RectangleShape2D();
+                if (GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
+                {
+                    playerExtentY = (RectangleShape2D) GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
+                }
+                // Print($"P ext: {pR.GetExtents().y}");
+
+                Enemy e = (Enemy) colliderType;
+                float enemyExtentY = 0;
+                if (e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
+                {
+                    RectangleShape2D r = (RectangleShape2D) e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
+                    // Print(r.GetExtents().y);
+                    enemyExtentY = r.GetExtents().y * 2;
+                }
+
+                if ((Position.y + playerExtentY.GetExtents().y) < e.Position.y)
+                {
+                    if (e.HasMethod("TakeDamage"))
+                    {
+                        e.TakeDamage();
+                    }   
+                }
+                else
+                {
+                    Hurt();
+                }
             }
         }
 

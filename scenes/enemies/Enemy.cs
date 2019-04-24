@@ -23,12 +23,14 @@ public class Enemy : KinematicBody2D
         Velocity = new Vector2(Facing * Speed, NewY);
 
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+
+        // GD.Print($"enemy: {GetNode<CollisionShape2D>("CollisionShape2D").GlobalPosition.y - 28}");
+
         for (int i = 0; i < GetSlideCount(); i++)
         {
-            var collision = GetSlideCollision(i);
-            var colliderType = collision.GetCollider();
+            var colliderType = GetSlideCollision(i).GetCollider();
 //            GD.Print(colliderType.ToString());
-            if (colliderType.ToString() == "Player")
+            if (colliderType is Player)
             {
                 if (colliderType != null)
                 {
@@ -38,9 +40,9 @@ public class Enemy : KinematicBody2D
                 }
             }
 
-            if (collision.Normal.x != 0)
+            if (GetSlideCollision(i).Normal.x != 0)
             {
-                Facing = Mathf.Sign((int) collision.Normal.x);
+                Facing = Mathf.Sign((int) GetSlideCollision(i).Normal.x);
                 Velocity = new Vector2(Velocity.x, -100);
             }
         }
@@ -51,7 +53,7 @@ public class Enemy : KinematicBody2D
         }
     }
 
-    private void TakeDamage()
+    public void TakeDamage()
     {
         GetNode<AnimationPlayer>("AnimationPlayer").Play("death");
         GetNode<CollisionShape2D>("CollisionShape2D").Disabled = true;
