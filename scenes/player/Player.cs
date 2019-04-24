@@ -97,6 +97,7 @@ public class Player : KinematicBody2D
                     if (e.HasMethod("TakeDamage"))
                     {
                         e.TakeDamage();
+                        Velocity = new Vector2(Velocity.x, -200);
                     }   
                 }
                 else

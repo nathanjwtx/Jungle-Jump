@@ -31,7 +31,7 @@ public class Level : Node2D
         TileMap world = GetNode<TileMap>("World");
         Rect2 mapSize = world.GetUsedRect();
         Vector2 cellSize = world.CellSize;
-        Player.GetNode<Camera2D>("Camera2D").LimitLeft = Convert.ToInt32((mapSize.Position.x - 5) * cellSize.x);
+        Player.GetNode<Camera2D>("Camera2D").LimitLeft = Convert.ToInt32((mapSize.Position.x - 15) * cellSize.x);
         Player.GetNode<Camera2D>("Camera2D").LimitRight = Convert.ToInt32((mapSize.End.x + 5) * cellSize.x);
     }
 

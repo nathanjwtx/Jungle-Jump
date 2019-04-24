@@ -18,19 +18,16 @@ motion_scale = Vector2( 0.2, 1 )
 motion_mirroring = Vector2( 576, 0 )
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2( -200, -200 )
 scale = Vector2( 1.5, 2 )
 texture = ExtResource( 2 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2( 0, -3 )
 motion_scale = Vector2( 0.6, 1 )
 motion_mirroring = Vector2( 880, 0 )
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-position = Vector2( 0, 154 )
-scale = Vector2( 1, 0.7 )
+position = Vector2( 439.853, 414.164 )
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 880, 368 )
@@ -65,4 +62,9 @@ visible = false
 
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( -96, -10 )
+
+[node name="Env" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 16, 16 )
+format = 1
 
