@@ -54,6 +54,7 @@
     <Compile Include="scenes\enemies\Enemy.cs" />
     <Compile Include="scenes\levels\Level.cs" />
     <Compile Include="scenes\player\Player.cs" />
+    <Compile Include="scenes\ui\HUD.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
