@@ -21,6 +21,7 @@ public class HUD : MarginContainer
 
     public void _on_Player_LifeChanged(int value)
     {
+        GD.Print(value);
         for (int i = 0; i < LifeCounter.Count; i++)
         {
             TextureRect t = (TextureRect) GetNode(LifeCounter[i]);
@@ -28,8 +29,9 @@ public class HUD : MarginContainer
         }
     }
 
-    public void _on_Score_Changed(string value)
+    public void _on_ScoreChanged(int value)
     {
-        GetNode<Label>("HBoxContainer/ScoreLabel").Text = value;
+        GD.Print(value);
+        GetNode<Label>("HBoxContainer/ScoreLabel").Text = value.ToString();
     }
 }

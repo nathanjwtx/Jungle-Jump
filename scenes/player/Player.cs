@@ -55,7 +55,7 @@ public class Player : KinematicBody2D
             Anim = NewAnim;
             GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
         }
-        Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+        
         if (CurrentState == State.HURT)
         {
             return;
@@ -115,6 +115,8 @@ public class Player : KinematicBody2D
         {
             NewAnim = "jump_down";
         }
+
+        Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
     }
 
     public async void ChangeState(State newState)
