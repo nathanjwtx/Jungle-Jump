@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/environment/layers/back.png" type="Texture" id=1]
+[ext_resource path="res://assets/environment/layers/middle.png" type="Texture" id=2]
+[ext_resource path="res://assets/Kenney Thick.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 25
+font_data = ExtResource( 3 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+stretch_mode = 7
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+margin_top = 296.0
+margin_right = 1024.0
+margin_bottom = 664.0
+texture = ExtResource( 2 )
+stretch_mode = 2
+
+[node name="Title" type="Label" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -28.5
+margin_bottom = 28.5
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color_shadow = Color( 0.294118, 0.0705882, 0.0705882, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_constants/shadow_as_outline = 4
+text = "Jungle Jump"
+align = 1
+
+[node name="Message" type="Label" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 154.0
+margin_bottom = 168.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0.294118, 0.0705882, 0.0705882, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_constants/shadow_as_outline = 4
+text = "Press Space to play"
+align = 1
+
