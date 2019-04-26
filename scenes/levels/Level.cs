@@ -5,6 +5,8 @@ public class Level : Node2D
 {
     [Signal]
     delegate void ScoreChanged();
+    [Signal]
+    delegate void LifeChanged();
     
     private TileMap Pickups { get; set;  }
     private Player Player { get; set; }
@@ -25,6 +27,7 @@ public class Level : Node2D
         GetNode<Player>("Player").Start(new Vector2(startPos.Position.x, startPos.Position.y));
 
         Connect("ScoreChanged", GetNode<HUD>("CanvasLayer/HUD"), "_on_ScoreChanged");
+        Connect("LifeChanged", GetNode<HUD>("CanvasLayer/HUD"), "_on_Player_LifeChanged");
 
         SetCameraLimits();
         SpawnPickups();
@@ -63,6 +66,7 @@ public class Level : Node2D
         if (type == "cherry") 
         {
             Score += 1;
+            EmitSignal("ScoreChanged", Score);
         }
         else if (type == "gem")
         {
@@ -70,14 +74,10 @@ public class Level : Node2D
             
             if (p.Life < 5)
             {
-                HUD h = GetNode<HUD>("CanvasLayer/HUD");
                 int newLives = p.Life += 1;
-                GD.Print($"Life: {p.Life}");
-                h.LifeChange(newLives);
+                EmitSignal("LifeChanged", p.Life);
             }
         }
-
-        EmitSignal("ScoreChanged", Score);
     }
 
     private void _on_Player_Dead()
