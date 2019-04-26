@@ -6,6 +6,8 @@ public class Collectible : Area2D
 {
     [Signal]
     delegate void Pickup();
+
+    public string PickupType { get; set; }
     
     private Dictionary<string, string> Textures = new Dictionary<string, string>();
 
@@ -19,13 +21,14 @@ public class Collectible : Area2D
     {
         CreateSpriteDict();
 //        GD.Print(GetParent().GetName());
+        PickupType = type;
         GetNode<Sprite>("Sprite").Texture = GD.Load<Texture>(Textures[type]);
         Position = pos;
     }
     
     private void _on_Collectible_body_entered(object body)
     {
-        EmitSignal("Pickup");
+        EmitSignal("Pickup", PickupType);
         QueueFree();
     }
 

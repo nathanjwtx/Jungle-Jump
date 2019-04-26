@@ -33,7 +33,7 @@ custom_colors/font_color_shadow = Color( 0.207843, 0.0392157, 0.0392157, 1 )
 custom_constants/shadow_offset_x = 5
 custom_constants/shadow_offset_y = 5
 custom_constants/shadow_as_outline = 5
-text = "1"
+text = "0"
 
 [node name="LifeCounter" type="HBoxContainer" parent="HBoxContainer"]
 margin_left = 588.0

@@ -19,8 +19,13 @@ public class Level : Node2D
         Player = GetNode<Player>("Player");
         Pickups = GetNode<TileMap>("Pickups");
         Pickups.Hide();
+        Score = 0;
+        // EmitSignal("ScoreChanged", Score);
         Position2D startPos = GetNode<Position2D>("PlayerSpawn");
         GetNode<Player>("Player").Start(new Vector2(startPos.Position.x, startPos.Position.y));
+
+        Connect("ScoreChanged", GetNode<HUD>("CanvasLayer/HUD"), "_on_ScoreChanged");
+
         SetCameraLimits();
         SpawnPickups();
     }
@@ -53,9 +58,25 @@ public class Level : Node2D
         }
     }
     
-    private void _on_Collectible_Pickup()
+    private void _on_Collectible_Pickup(string type)
     {
-        Score += 1;
+        if (type == "cherry") 
+        {
+            Score += 1;
+        }
+        else if (type == "gem")
+        {
+            Player p = GetNode<Player>("Player");
+            
+            if (p.Life < 5)
+            {
+                HUD h = GetNode<HUD>("CanvasLayer/HUD");
+                int newLives = p.Life += 1;
+                GD.Print($"Life: {p.Life}");
+                h.LifeChange(newLives);
+            }
+        }
+
         EmitSignal("ScoreChanged", Score);
     }
 
