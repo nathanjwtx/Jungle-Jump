@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using GlobalGameState;
 
 public class Level : Node2D
 {
@@ -12,11 +13,13 @@ public class Level : Node2D
     private Player Player { get; set; }
     private PackedScene Collectible { get; set; }
     public int Score { get; set; }
-    
+
+    private GameState _gameState;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        _gameState = (GameState)GetNode("/root/GameState");
         Collectible = (PackedScene) ResourceLoader.Load("res://scenes/Collectible.tscn");
         Player = GetNode<Player>("Player");
         Pickups = GetNode<TileMap>("Pickups");
@@ -82,7 +85,7 @@ public class Level : Node2D
 
     private void _on_Player_Dead()
     {
-        return;
+        _gameState.Restart();
     }
 
 }
