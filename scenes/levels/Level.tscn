@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/levels/Level.cs" type="Script" id=1]
 [ext_resource path="res://assets/environment/layers/back.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/tilesets/tiles_items.tres" type="TileSet" id=6]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/Door.tscn" type="PackedScene" id=9]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 1 )
@@ -73,4 +74,7 @@ format = 1
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource( 8 )]
 
+[node name="Door" parent="." instance=ExtResource( 9 )]
+position = Vector2( 909.95, 423.608 )
 [connection signal="LifeChanged" from="Player" to="CanvasLayer/HUD" method="_on_Player_LifeChanged"]
+[connection signal="body_entered" from="Door" to="." method="_on_Door_body_entered"]

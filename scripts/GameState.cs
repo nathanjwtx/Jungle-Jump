@@ -6,6 +6,7 @@ public class GameState : Node
 {
     public int NumberOfLevels { get; set; }
     public int CurrentLevel { get; set; }
+    public bool GameStart { get; set; }
 
     public string GameScene { get; } = "res://scenes/Main.tscn";
 
@@ -15,6 +16,7 @@ public class GameState : Node
     {
         base._Ready();
         NumberOfLevels = 2;
+        CurrentLevel = 1;
     }
 
     public void Restart()
@@ -22,7 +24,7 @@ public class GameState : Node
         GetTree().ChangeScene("TitleScreen");
     }
     
-    private void NextLevel()
+    public void NextLevel()
     {
         CurrentLevel += 1;
         // Add a game over screen?

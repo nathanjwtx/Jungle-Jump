@@ -88,4 +88,9 @@ public class Level : Node2D
         _gameState.Restart();
     }
 
+    private void _on_Door_body_entered(object body)
+    {
+        _gameState.NextLevel();
+    }
+
 }
