@@ -19,7 +19,7 @@ public class Player : KinematicBody2D
 
 
     public enum State
-    { IDLE, RUN, JUMP, HURT, DEAD };
+    { IDLE, RUN, JUMP, HURT, DEAD, CROUCH, CLIMB };
 
     public string NewAnim { get; set; }
     public string Anim { get; set; }
@@ -28,6 +28,7 @@ public class Player : KinematicBody2D
     public bool KeyRight { get; set; }
     public bool KeyLeft { get; set; }
     public bool KeyJump { get; set; }
+    public bool KeyCrouch { get; set; }
     public int Life { get; set; }
 
     public override void _Ready()
@@ -151,6 +152,9 @@ public class Player : KinematicBody2D
                 EmitSignal("Dead");
                 Hide();
                 break;
+            case State.CROUCH:
+                NewAnim = "crouch";
+                break;
             default:
                 break;
         }
@@ -166,6 +170,7 @@ public class Player : KinematicBody2D
         KeyRight = Input.IsActionPressed("ui_right");
         KeyLeft = Input.IsActionPressed("ui_left");
         KeyJump = Input.IsActionPressed("ui_jump");
+        KeyCrouch = Input.IsActionPressed("ui_crouch");
 
         Velocity = new Vector2(0, Velocity.y);
 
@@ -186,7 +191,15 @@ public class Player : KinematicBody2D
             ChangeState(State.JUMP);
             Velocity = new Vector2(Velocity.x, JumpSpeed);
         }
-        if (CurrentState == State.IDLE && Velocity.x != 0)
+        if (KeyCrouch && IsOnFloor())
+        {
+            ChangeState(State.CROUCH);
+        }
+        if (!KeyCrouch && CurrentState == State.CROUCH)
+        {
+            ChangeState(State.IDLE);
+        }
+        if (CurrentState == State.IDLE || CurrentState == State.CROUCH && Velocity.x != 0)
         {
             ChangeState(State.RUN);
         }
