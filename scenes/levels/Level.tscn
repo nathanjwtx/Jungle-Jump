@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/levels/Level.cs" type="Script" id=1]
 [ext_resource path="res://assets/environment/layers/back.png" type="Texture" id=2]
@@ -9,6 +9,23 @@
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/Door.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Animation" id=1]
+resource_name = "dawn_to_dusk"
+length = 60.0
+step = 10.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10, 20, 30, 40, 50, 60 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.952941, 0.933333, 0.917647, 1 ), Color( 0.862745, 0.784314, 0.737255, 1 ), Color( 0.945098, 0.505882, 0.243137, 1 ), Color( 0.921569, 0.427451, 0.101961, 1 ), Color( 0.917647, 0.247059, 0.247059, 1 ), Color( 0.298039, 0.117647, 0.239216, 1 ) ]
+}
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 1 )
@@ -23,6 +40,10 @@ motion_mirroring = Vector2( 576, 0 )
 scale = Vector2( 1.5, 2 )
 texture = ExtResource( 2 )
 centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ParallaxBackground/ParallaxLayer"]
+autoplay = "dawn_to_dusk"
+anims/dawn_to_dusk = SubResource( 1 )
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.6, 1 )

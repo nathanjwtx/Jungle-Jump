@@ -14,6 +14,8 @@ public class Level : Node2D
     private PackedScene Collectible { get; set; }
     public int Score { get; set; }
 
+    public float DefaultDayLengthRatio { get; } = 1.0f;
+
     private GameState _gameState;
 
     // Called when the node enters the scene tree for the first time.

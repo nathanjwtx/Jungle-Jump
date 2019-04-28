@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/levels/Level.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/enemies/Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/levels/Level2.cs" type="Script" id=2]
+[ext_resource path="res://scenes/enemies/Enemy.tscn" type="PackedScene" id=3]
 
 [node name="Level" index="0" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Sprite" parent="ParallaxBackground/ParallaxLayer" index="0"]
+self_modulate = Color( 0.298039, 0.117647, 0.239216, 1 )
+
+[node name="AnimationPlayer" parent="ParallaxBackground/ParallaxLayer" index="1"]
+autoplay = ""
 
 [node name="World" parent="." index="1"]
 tile_data = PoolIntArray( 655346, 54, 0, 655347, 54, 0, 655348, 54, 0, 655349, 54, 0, 655350, 54, 0, 655351, 54, 0, 655352, 54, 0, 655353, 54, 0, 655357, 54, 0, 655358, 54, 0, 589832, 54, 0, 720890, 54, 0, 720891, 54, 0, 720892, 54, 0, 720893, 54, 0, 720894, 54, 0, 720895, 54, 0, 655360, 54, 0, 655361, 54, 0, 655362, 54, 0, 655363, 54, 0, 655364, 54, 0, 655365, 54, 0, 655366, 54, 0, 655367, 54, 0 )
@@ -14,6 +22,10 @@ tile_data = PoolIntArray( 65535, 4, 0, 2, 3, 0, 3, 5, 0, 655354, 0, 0, 655355, 0
 [node name="PlayerSpawn" parent="." index="6"]
 position = Vector2( -32.03, 122.575 )
 
-[node name="Enemy" parent="." index="7" instance=ExtResource( 2 )]
+[node name="Enemy" parent="." index="7" instance=ExtResource( 3 )]
 position = Vector2( 2.45547, 145.051 )
 
+[node name="HUD" parent="CanvasLayer" index="0"]
+margin_bottom = 97.0
+[connection signal="animation_finished" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="animation_started" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_started"]
