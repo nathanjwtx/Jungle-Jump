@@ -176,14 +176,12 @@ public class Player : KinematicBody2D
 
         if (KeyRight)
         {
-            float x = Velocity.x + RunSpeed;
-            Velocity = new Vector2(x, Velocity.y);
+            MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
             GetNode<Sprite>("Sprite").FlipH = false;
         }
         if (KeyLeft)
         {
-            float x = Velocity.x - RunSpeed;
-            Velocity = new Vector2(x, Velocity.y);
+            MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
             GetNode<Sprite>("Sprite").FlipH = true;
         }
         if (KeyJump && IsOnFloor())
@@ -191,7 +189,7 @@ public class Player : KinematicBody2D
             ChangeState(State.JUMP);
             Velocity = new Vector2(Velocity.x, JumpSpeed);
         }
-        if (KeyCrouch && IsOnFloor())
+        if (KeyCrouch && !KeyRight && IsOnFloor())
         {
             ChangeState(State.CROUCH);
         }
@@ -199,7 +197,7 @@ public class Player : KinematicBody2D
         {
             ChangeState(State.IDLE);
         }
-        if (CurrentState == State.IDLE || CurrentState == State.CROUCH && Velocity.x != 0)
+        if (CurrentState == State.IDLE && Velocity.x != 0)
         {
             ChangeState(State.RUN);
         }
@@ -211,6 +209,28 @@ public class Player : KinematicBody2D
         {
             ChangeState(State.JUMP);
         }
+    }
+
+    private void MoveCharacter(bool KeyCrouch, bool KeyRight, bool KeyLeft)
+    {
+        float x;
+        int newRunSpeed;
+        if (KeyCrouch)
+        {
+            newRunSpeed =  RunSpeed / 3;
+            ChangeState(State.CROUCH);
+            NewAnim = "crouch";
+        }
+        else
+        {
+            newRunSpeed = RunSpeed;
+        }
+        if (KeyLeft)
+        {
+            newRunSpeed = newRunSpeed * -1;
+        }
+        x = Velocity.x + newRunSpeed;
+        Velocity = new Vector2(x, Velocity.y);
     }
 
     public void Hurt()
