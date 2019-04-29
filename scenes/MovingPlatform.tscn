@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/MovingPlatform.cs" type="Script" id=1]
+[ext_resource path="res://assets/environment/layers/tileset.png" type="Texture" id=2]
+
+[node name="KinematicBody2D" type="KinematicBody2D"]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -6, 0 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 240, 224, 16, 16 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 10, 0 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 272, 224, 16, 16 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+position = Vector2( 26, 0 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 272, 224, 16, 16 )
+
+[node name="Sprite4" type="Sprite" parent="."]
+position = Vector2( 42, 0 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 304, 224, 16, 16 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -14.0169, -7.90992, 49.8953, -7.96845, 50.0123, 1.98125, 49.0174, 4.38089, 45.9739, 6.01966, 41.9355, 8.0096, -5.82305, 8.18518, -10.0956, 6.07819, -13.139, 4.2053, -14.134, 1.8642 )
