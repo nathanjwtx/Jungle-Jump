@@ -14,7 +14,7 @@ public class Level2 : Level
         GD.Print(DayLengthModifier);
         sunset.PlaybackSpeed = DefaultDayLengthRatio * DayLengthModifier;
         sunset.Play("dawn_to_dusk");
-        
+        // GetNode<KinematicBody2D>("MovingPlatform").Call("SetPath", GetNode<PathFollow2D>("Path2D/PathFollow2D"));
     }
 
     private void _on_AnimationPlayer_animation_started(String anim_name)
@@ -27,4 +27,5 @@ public class Level2 : Level
         GD.Print("done");
     }
 
+    
 }

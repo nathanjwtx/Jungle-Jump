@@ -49,7 +49,10 @@ public class Player : KinematicBody2D
     {
         base._PhysicsProcess(delta);
 
-        Velocity = new Vector2(Velocity.x, Velocity.y + Gravity * delta);
+        float newY = Velocity.y + Gravity * delta;
+
+        Velocity = new Vector2(Velocity.x, newY);
+        
         GetInput();
         if (NewAnim != Anim)
         {
@@ -73,6 +76,12 @@ public class Player : KinematicBody2D
                 {
                     Hurt();
                 }
+            }
+
+            if (colliderType is MovingPlatform)
+            {
+                SetMoveSlide(true);
+                // Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
             }
 
             if (colliderType is Enemy)
@@ -110,14 +119,28 @@ public class Player : KinematicBody2D
 
         if (CurrentState == State.JUMP && IsOnFloor())
         {
-            ChangeState(State.IDLE);
+            ChangeState(State.IDLE);    
         }
         if (CurrentState == State.JUMP && Velocity.y > 0)
         {
             NewAnim = "jump_down";
         }
+        SetMoveSlide(false);
 
-        Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+        // Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(0, -1));
+    }
+
+    private void SetMoveSlide(bool platform)
+    {
+        if (platform)
+        {
+            Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+            ChangeState(State.IDLE);
+        }
+        else
+        {
+            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1),new Vector2(0, -1), true);
+        }
     }
 
     public async void ChangeState(State newState)
