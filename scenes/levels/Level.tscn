@@ -80,11 +80,10 @@ cell_size = Vector2( 16, 16 )
 collision_mask = 2
 format = 1
 
-[node name="Player" parent="." instance=ExtResource( 7 )]
-visible = false
-
 [node name="PlayerSpawn" type="Position2D" parent="."]
 position = Vector2( -96, -10 )
+
+[node name="Player" parent="." instance=ExtResource( 7 )]
 
 [node name="Env" type="TileMap" parent="."]
 tile_set = ExtResource( 4 )
@@ -97,5 +96,4 @@ format = 1
 
 [node name="Door" parent="." instance=ExtResource( 9 )]
 position = Vector2( 909.95, 423.608 )
-[connection signal="LifeChanged" from="Player" to="CanvasLayer/HUD" method="_on_Player_LifeChanged"]
 [connection signal="body_entered" from="Door" to="." method="_on_Door_body_entered"]

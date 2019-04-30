@@ -31,6 +31,8 @@ public class Player : KinematicBody2D
     public bool KeyCrouch { get; set; }
     public int Life { get; set; }
 
+    private bool OnPlatform { get; set; }
+
     public override void _Ready()
     {
         ChangeState(State.IDLE);
@@ -49,20 +51,21 @@ public class Player : KinematicBody2D
     {
         base._PhysicsProcess(delta);
 
+        // exit if hurt
+        if (CurrentState == State.HURT)
+        {
+            return;
+        }
+
         float newY = Velocity.y + Gravity * delta;
 
         Velocity = new Vector2(Velocity.x, newY);
         
-        GetInput();
+        GetInput(OnPlatform);
         if (NewAnim != Anim)
         {
             Anim = NewAnim;
             GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
-        }
-        
-        if (CurrentState == State.HURT)
-        {
-            return;
         }
 
         for (int i = 0; i < GetSlideCount(); i++)
@@ -78,31 +81,26 @@ public class Player : KinematicBody2D
                 }
             }
 
-            if (colliderType is MovingPlatform)
-            {
-                SetMoveSlide(true);
-                // Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
-            }
+            // test if player is stood on moving platform
+            OnPlatform = colliderType is MovingPlatform;
 
             if (colliderType is Enemy)
             {
+                Enemy e = (Enemy) colliderType;
                 RectangleShape2D playerExtentY = new RectangleShape2D();
                 if (GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
                 {
                     playerExtentY = (RectangleShape2D) GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
                 }
-                // Print($"P ext: {pR.GetExtents().y}");
+                
+//                float enemyExtentY = 0;
+//                if (e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
+//                {
+//                    RectangleShape2D r = (RectangleShape2D) e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
+//                    enemyExtentY = r.GetExtents().y * 2;
+//                }
 
-                Enemy e = (Enemy) colliderType;
-                float enemyExtentY = 0;
-                if (e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
-                {
-                    RectangleShape2D r = (RectangleShape2D) e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
-                    // Print(r.GetExtents().y);
-                    enemyExtentY = r.GetExtents().y * 2;
-                }
-
-                if ((Position.y + playerExtentY.GetExtents().y) < e.Position.y)
+                if (Position.y + playerExtentY.GetExtents().y < e.Position.y)
                 {
                     if (e.HasMethod("TakeDamage"))
                     {
@@ -125,9 +123,7 @@ public class Player : KinematicBody2D
         {
             NewAnim = "jump_down";
         }
-        SetMoveSlide(false);
-
-        // Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(0, -1));
+        SetMoveSlide(OnPlatform);
     }
 
     private void SetMoveSlide(bool platform)
@@ -135,11 +131,11 @@ public class Player : KinematicBody2D
         if (platform)
         {
             Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
-            ChangeState(State.IDLE);
         }
         else
         {
-            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1),new Vector2(0, -1), true);
+            // Vector2.UP === new Vectro2(0, -1);
+            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1), Vector2.Up, true);
         }
     }
 
@@ -183,8 +179,9 @@ public class Player : KinematicBody2D
         }
     }
 
-    public void GetInput()
+    public void GetInput(bool platform)
     {
+        Print(platform);
         if (CurrentState == State.HURT)
         {
             return;
@@ -228,7 +225,7 @@ public class Player : KinematicBody2D
         {
             ChangeState(State.IDLE);
         }
-        if ((CurrentState == State.RUN || CurrentState == State.IDLE) && !IsOnFloor())
+        if ((CurrentState == State.RUN || CurrentState == State.IDLE) && !IsOnFloor() && !platform)
         {
             ChangeState(State.JUMP);
         }
