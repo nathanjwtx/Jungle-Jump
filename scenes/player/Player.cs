@@ -71,7 +71,7 @@ public class Player : KinematicBody2D
         for (int i = 0; i < GetSlideCount(); i++)
         {
             var colliderType = GetSlideCollision(i).GetCollider();
-            
+
             if (colliderType is TileMap)
             {
                 TileMap t = (TileMap) colliderType;
@@ -119,8 +119,9 @@ public class Player : KinematicBody2D
         {
             ChangeState(State.IDLE);    
         }
-        if (CurrentState == State.JUMP && Velocity.y > 0)
+        else if (CurrentState == State.JUMP && Velocity.y > 0 && OnPlatform)
         {
+            Print($"Jump: {CurrentState}");
             NewAnim = "jump_down";
         }
         SetMoveSlide(OnPlatform);
@@ -128,15 +129,22 @@ public class Player : KinematicBody2D
 
     private void SetMoveSlide(bool platform)
     {
+        Vector2 snapVector;
+        bool onSlope;
         if (platform)
         {
-            Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+            snapVector = new Vector2(0, 40);
+            onSlope = false;
+//            Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
         }
         else
         {
+            snapVector = new Vector2(0, -1);
+            onSlope = true;
             // Vector2.UP === new Vector2(0, -1);
-            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1), Vector2.Up, true);
+//            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1), Vector2.Up, true);
         }
+        Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up, onSlope);
     }
 
     public async void ChangeState(State newState)

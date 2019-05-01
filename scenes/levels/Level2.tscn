@@ -1,12 +1,30 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/levels/Level.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/levels/Level2.cs" type="Script" id=2]
-[ext_resource path="res://scenes/MovingPlatform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/MovingPlatform_v3.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/MovingPlatform_v2.tscn" type="PackedScene" id=4]
 
-[sub_resource type="Curve2D" id=1]
+[sub_resource type="Animation" id=1]
+resource_name = "platform2"
+length = 8.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Platform3:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3, 4, 7, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 200, 120 ), Vector2( 300, 60 ), Vector2( 300, 60 ), Vector2( 200, 120 ), Vector2( 200, 120 ) ]
+}
+
+[sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 185, 115, 0, 0, 0, 0, 315, 115, 0, 0, 0, 0, 360, 115, 0, 0, 0, 0, 335, 115, 0, 0, 0, 0, 295, 115, 0, 0, 0, 0, 235, 115, 0, 0, 0, 0, 195, 115, 0, 0, 0, 0, 185, 115 )
+"points": PoolVector2Array( 0, 0, 0, 0, 125, 120, 0, 0, 0, 0, 170, 120, 0, 0, 0, 0, 130, 120, 0, 0, 0, 0, 125, 120, 0, 0, 0, 0, 125, 120 )
 }
 
 [node name="Level" index="0" instance=ExtResource( 1 )]
@@ -19,26 +37,40 @@ visible = false
 autoplay = ""
 
 [node name="World" parent="." index="1"]
-tile_data = PoolIntArray( 458756, 10, 0, 524290, 10, 0, 655346, 54, 0, 655347, 54, 0, 655348, 54, 0, 655349, 54, 0, 655350, 54, 0, 655351, 54, 0, 655352, 54, 0, 655353, 54, 0, 655357, 54, 0, 655358, 54, 0, 589832, 54, 0, 720890, 54, 0, 720891, 54, 0, 720892, 54, 0, 720893, 54, 0, 720894, 54, 0, 720895, 54, 0, 655360, 54, 0, 655361, 54, 0, 655362, 54, 0, 655363, 54, 0, 655364, 54, 0, 655365, 54, 0, 655366, 54, 0, 655367, 54, 0 )
+tile_data = PoolIntArray( 393222, 10, 0, 393224, -1073741808, 0, 458756, 10, 0, 524290, 10, 0, 655346, 54, 0, 655347, 54, 0, 655348, 54, 0, 655349, 54, 0, 655350, 54, 0, 655351, 54, 0, 655352, 54, 0, 655353, 54, 0, 655357, 54, 0, 655358, 54, 0, 589832, 54, 0, 720890, 54, 0, 720891, 54, 0, 720892, 54, 0, 720893, 54, 0, 720894, 54, 0, 720895, 54, 0, 655360, 54, 0, 655361, 54, 0, 655362, 54, 0, 655363, 54, 0, 655364, 54, 0, 655365, 54, 0, 655366, 54, 0, 655367, 54, 0 )
 
 [node name="Danger" parent="." index="2"]
 tile_data = PoolIntArray( 65535, 4, 0, 2, 3, 0, 3, 5, 0, 655354, 0, 0, 655355, 0, 0, 655356, 0, 0 )
 
 [node name="PlayerSpawn" parent="." index="5"]
-position = Vector2( 7.97, 122.575 )
+position = Vector2( 135, 75 )
+
+[node name="Player" parent="." index="6"]
+position = Vector2( 135, 75 )
 
 [node name="HUD" parent="CanvasLayer" index="0"]
 margin_bottom = 97.0
 
-[node name="Path2D" type="Path2D" parent="." index="10"]
-curve = SubResource( 1 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="10"]
+anims/platform2 = SubResource( 1 )
+
+[node name="Platform3" parent="." index="11" instance=ExtResource( 3 )]
+position = Vector2( 249.001, 90.5994 )
+collision_mask = 3
+motion/sync_to_physics = true
+
+[node name="Path2D" type="Path2D" parent="." index="12"]
+curve = SubResource( 2 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" index="0"]
-position = Vector2( 185, 115 )
+position = Vector2( 125, 120 )
+rotation = -1.9458e-006
 rotate = false
 
-[node name="KinematicBody2D" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
-collision_mask = 2
-Speed = 20
+[node name="KinematicBody2D" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 4 )]
+position = Vector2( -7.62939e-006, 2.575 )
+collision_mask = 3
+motion/sync_to_physics = true
+Speed = 10
 [connection signal="animation_finished" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="animation_started" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_started"]
