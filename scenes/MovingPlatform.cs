@@ -4,8 +4,7 @@ using static Godot.GD;
 
 public class MovingPlatform : KinematicBody2D
 {
-    [Export()]
-    public Vector2 Velocity;
+    [Export()] public int Speed;
 
     private PathFollow2D _pathFollow;
 
@@ -18,17 +17,9 @@ public class MovingPlatform : KinematicBody2D
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        int speed = 10;
-        // if (_pathFollow.GetUnitOffset() == 0.0)
-        // {
-        //     Print("start");            // speed = 10;
-        // }
-        // else if (_pathFollow.GetUnitOffset() >= 1.0)
-        // {
-        //     Print("end");
-        //     speed = -10;
-        // }
-        _pathFollow.SetOffset(_pathFollow.GetOffset() + speed * delta);
+//        int speed = 10;
+        
+        _pathFollow.SetOffset(_pathFollow.GetOffset() + Speed * delta);
         // using (KinematicCollision2D collision = MoveAndCollide(Velocity * delta))
         // {
         //     if (collision != null)

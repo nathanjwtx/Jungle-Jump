@@ -134,7 +134,7 @@ public class Player : KinematicBody2D
         }
         else
         {
-            // Vector2.UP === new Vectro2(0, -1);
+            // Vector2.UP === new Vector2(0, -1);
             Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1), Vector2.Up, true);
         }
     }
@@ -181,7 +181,6 @@ public class Player : KinematicBody2D
 
     public void GetInput(bool platform)
     {
-        Print(platform);
         if (CurrentState == State.HURT)
         {
             return;

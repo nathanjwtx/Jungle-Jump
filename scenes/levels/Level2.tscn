@@ -6,14 +6,14 @@
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 148.608, 125.789, -5.04121, -0.0155653, 5.04121, 0.0155653, 264.377, 125.709 )
+"points": PoolVector2Array( 0, 0, 0, 0, 185, 115, 0, 0, 0, 0, 315, 115, 0, 0, 0, 0, 360, 115, 0, 0, 0, 0, 335, 115, 0, 0, 0, 0, 295, 115, 0, 0, 0, 0, 235, 115, 0, 0, 0, 0, 195, 115, 0, 0, 0, 0, 185, 115 )
 }
 
 [node name="Level" index="0" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="ParallaxBackground" parent="." index="0"]
-editor/display_folded = true
+[node name="ParallaxLayer" parent="ParallaxBackground" index="0"]
+visible = false
 
 [node name="AnimationPlayer" parent="ParallaxBackground/ParallaxLayer" index="1"]
 autoplay = ""
@@ -31,14 +31,14 @@ position = Vector2( 7.97, 122.575 )
 margin_bottom = 97.0
 
 [node name="Path2D" type="Path2D" parent="." index="10"]
-position = Vector2( -62.9283, 0 )
-scale = Vector2( 1.42345, 1 )
 curve = SubResource( 1 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" index="0"]
-position = Vector2( 148.608, 125.789 )
-rotation = -0.000853514
+position = Vector2( 185, 115 )
+rotate = false
 
 [node name="KinematicBody2D" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
+collision_mask = 2
+Speed = 20
 [connection signal="animation_finished" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="animation_started" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_started"]
