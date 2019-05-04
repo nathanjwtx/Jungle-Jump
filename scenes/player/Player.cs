@@ -35,11 +35,13 @@ public class Player : KinematicBody2D
 
     public override void _Ready()
     {
+        Print("loaded");
         ChangeState(State.IDLE);
     }
 
     public void Start(Vector2 startPos)
     {
+        Print("called");
         Life = 3;
         EmitSignal("LifeChanged", Life);
         Position = startPos;
@@ -83,6 +85,10 @@ public class Player : KinematicBody2D
 
             // test if player is stood on moving platform
             OnPlatform = colliderType is MovingPlatform;
+//            if (OnPlatform)
+//            {
+//                Print(CurrentState);
+//            }
 
             if (colliderType is Enemy)
             {
@@ -115,15 +121,15 @@ public class Player : KinematicBody2D
             }
         }
 
-        if (CurrentState == State.JUMP && IsOnFloor())
-        {
-            ChangeState(State.IDLE);    
-        }
-        else if (CurrentState == State.JUMP && Velocity.y > 0 && OnPlatform)
-        {
-            Print($"Jump: {CurrentState}");
-            NewAnim = "jump_down";
-        }
+//        if (CurrentState == State.JUMP && IsOnFloor())
+//        {
+//            ChangeState(State.IDLE);    
+//        }
+//        else if (CurrentState == State.JUMP && Velocity.y > 0 && OnPlatform)
+//        {
+//            Print($"Jump: {CurrentState}");
+//            NewAnim = "jump_down";
+//        }
         SetMoveSlide(OnPlatform);
     }
 
@@ -201,40 +207,25 @@ public class Player : KinematicBody2D
 
         Velocity = new Vector2(0, Velocity.y);
 
+        // move right
         if (KeyRight)
         {
             MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
+            ChangeState(State.RUN);
+            // needed to switch the sprite direction
             GetNode<Sprite>("Sprite").FlipH = false;
         }
+        // move left
         if (KeyLeft)
         {
             MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
+            ChangeState(State.RUN);
             GetNode<Sprite>("Sprite").FlipH = true;
         }
-        if (KeyJump && IsOnFloor())
-        {
-            ChangeState(State.JUMP);
-            Velocity = new Vector2(Velocity.x, JumpSpeed);
-        }
-        if (KeyCrouch && !KeyRight && IsOnFloor())
-        {
-            ChangeState(State.CROUCH);
-        }
-        if (!KeyCrouch && CurrentState == State.CROUCH)
+        // cancel run
+        if (Velocity.x == 0 && CurrentState == State.RUN)
         {
             ChangeState(State.IDLE);
-        }
-        if (CurrentState == State.IDLE && Velocity.x != 0)
-        {
-            ChangeState(State.RUN);
-        }
-        if (CurrentState == State.RUN && Velocity.x == 0)
-        {
-            ChangeState(State.IDLE);
-        }
-        if ((CurrentState == State.RUN || CurrentState == State.IDLE) && !IsOnFloor() && !platform)
-        {
-            ChangeState(State.JUMP);
         }
     }
 
