@@ -41,7 +41,6 @@ public class Player : KinematicBody2D
 
     public void Start(Vector2 startPos)
     {
-        Print("called");
         Life = 3;
         EmitSignal("LifeChanged", Life);
         Position = startPos;
@@ -63,7 +62,7 @@ public class Player : KinematicBody2D
 
         Velocity = new Vector2(Velocity.x, newY);
         
-        GetInput(OnPlatform);
+        GetInput();
         if (NewAnim != Anim)
         {
             Anim = NewAnim;
@@ -84,7 +83,7 @@ public class Player : KinematicBody2D
             }
 
             // test if player is stood on moving platform
-            OnPlatform = colliderType is MovingPlatform;
+            // OnPlatform = colliderType is MovingPlatform;
 //            if (OnPlatform)
 //            {
 //                Print(CurrentState);
@@ -98,13 +97,6 @@ public class Player : KinematicBody2D
                 {
                     playerExtentY = (RectangleShape2D) GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
                 }
-                
-//                float enemyExtentY = 0;
-//                if (e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
-//                {
-//                    RectangleShape2D r = (RectangleShape2D) e.GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
-//                    enemyExtentY = r.GetExtents().y * 2;
-//                }
 
                 if (Position.y + playerExtentY.GetExtents().y < e.Position.y)
                 {
@@ -121,36 +113,23 @@ public class Player : KinematicBody2D
             }
         }
 
-//        if (CurrentState == State.JUMP && IsOnFloor())
-//        {
-//            ChangeState(State.IDLE);    
-//        }
-//        else if (CurrentState == State.JUMP && Velocity.y > 0 && OnPlatform)
-//        {
-//            Print($"Jump: {CurrentState}");
-//            NewAnim = "jump_down";
-//        }
-        SetMoveSlide(OnPlatform);
+        SetMoveSlide();
     }
 
-    private void SetMoveSlide(bool platform)
+    private void SetMoveSlide()
     {
         Vector2 snapVector;
-        bool onSlope;
-        if (platform)
+        // bool onSlope;
+        if (CurrentState == State.JUMP && IsOnFloor())
         {
-            snapVector = new Vector2(0, 40);
-            onSlope = false;
-//            Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
+            snapVector = new Vector2(0, 0);
         }
         else
         {
-            snapVector = new Vector2(0, -1);
-            onSlope = true;
-            // Vector2.UP === new Vector2(0, -1);
-//            Velocity = MoveAndSlideWithSnap(Velocity, new Vector2(-1, -1), Vector2.Up, true);
+            snapVector = new Vector2(0, 40);
         }
-        Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up, onSlope);
+        // Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up, onSlope);
+        Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up);
     }
 
     public async void ChangeState(State newState)
@@ -193,7 +172,7 @@ public class Player : KinematicBody2D
         }
     }
 
-    public void GetInput(bool platform)
+    public void GetInput()
     {
         if (CurrentState == State.HURT)
         {
@@ -226,6 +205,12 @@ public class Player : KinematicBody2D
         if (Velocity.x == 0 && CurrentState == State.RUN)
         {
             ChangeState(State.IDLE);
+        }
+        // make player jump
+        if (KeyJump && IsOnFloor())
+        {
+            ChangeState(State.JUMP);
+            Velocity = new Vector2(0, JumpSpeed);
         }
     }
 
