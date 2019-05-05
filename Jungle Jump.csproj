@@ -55,9 +55,9 @@
     <Compile Include="scenes\levels\Level.cs" />
     <Compile Include="scenes\levels\Level2.cs" />
     <Compile Include="scenes\Main.cs" />
-    <Compile Include="scenes\MovingPlatform.cs" />
-    <Compile Include="scenes\MovingPlatform_v2.cs" />
-    <Compile Include="scenes\MovingPlatform_v3.cs" />
+    <Compile Include="scenes\platforms\MovingPlatform.cs" />
+    <Compile Include="scenes\platforms\MovingPlatform_v2.cs" />
+    <Compile Include="scenes\platforms\MovingPlatform_v3.cs" />
     <Compile Include="scenes\player\Player.cs" />
     <Compile Include="scenes\ui\HUD.cs" />
     <Compile Include="scenes\ui\Start.cs" />

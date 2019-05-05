@@ -2,32 +2,24 @@
 
 [ext_resource path="res://scenes/levels/Level.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/levels/Level2.cs" type="Script" id=2]
-[ext_resource path="res://scenes/MovingPlatform_v3.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/MovingPlatform_v2.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/platforms/MovingPlatform.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "platform2"
 length = 8.0
 loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Platform3:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 3, 4, 7, 8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 200, 120 ), Vector2( 300, 60 ), Vector2( 300, 60 ), Vector2( 200, 120 ), Vector2( 200, 120 ) ]
-}
 
 [sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 125, 120, 0, 0, 0, 0, 170, 120, 0, 0, 0, 0, 130, 120, 0, 0, 0, 0, 125, 120, 0, 0, 0, 0, 125, 120 )
 }
 
-[node name="Level" index="0" instance=ExtResource( 1 )]
+[sub_resource type="Curve2D" id=3]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 210, 120, 0, 0, 0, 0, 270, 65, 0, 0, 0, 0, 210, 120 )
+}
+
+[node name="Level" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
 [node name="ParallaxLayer" parent="ParallaxBackground" index="0"]
@@ -47,30 +39,40 @@ position = Vector2( 135, 75 )
 
 [node name="Player" parent="." index="6"]
 position = Vector2( 135, 75 )
+Accenleration = 25
 
 [node name="HUD" parent="CanvasLayer" index="0"]
+margin_left = 10.0
+margin_right = 10.0
 margin_bottom = 97.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="10"]
 anims/platform2 = SubResource( 1 )
 
-[node name="Platform3" parent="." index="11" instance=ExtResource( 3 )]
-position = Vector2( 249.001, 90.5994 )
-collision_mask = 3
-motion/sync_to_physics = true
+[node name="Platforms" type="Node" parent="." index="11"]
 
-[node name="Path2D" type="Path2D" parent="." index="12"]
+[node name="Path2D" type="Path2D" parent="Platforms" index="0"]
 curve = SubResource( 2 )
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" index="0"]
+[node name="PathFollow2D" type="PathFollow2D" parent="Platforms/Path2D" index="0"]
 position = Vector2( 125, 120 )
 rotation = -1.9458e-006
 rotate = false
 
-[node name="KinematicBody2D" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 4 )]
-position = Vector2( -7.62939e-006, 2.575 )
-collision_mask = 3
-motion/sync_to_physics = true
-Speed = 10
+[node name="MovingPlatform1" parent="Platforms/Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
+Speed = 20
+
+[node name="Path2D2" type="Path2D" parent="Platforms" index="1"]
+position = Vector2( 22, 0 )
+curve = SubResource( 3 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Platforms/Path2D2" index="0"]
+position = Vector2( 210, 120 )
+rotation = -0.741944
+rotate = false
+
+[node name="MovingPlatform1" parent="Platforms/Path2D2/PathFollow2D" index="0" instance=ExtResource( 3 )]
+rotation = 0.741765
+Speed = 25
 [connection signal="animation_finished" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="animation_started" from="ParallaxBackground/ParallaxLayer/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_started"]

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/levels/Level.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/enemies/Enemy.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/MovingPlatform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/platforms/MovingPlatform.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -26,6 +26,9 @@ tile_data = PoolIntArray( 1507331, 3, 0, 1507382, 5, 0, 1966102, 5, 0, 1966127, 
 [node name="PlayerSpawn" parent="." index="5"]
 position = Vector2( 46.0921, 444.672 )
 
+[node name="Player" parent="." index="6"]
+Accenleration = 25
+
 [node name="Env" parent="." index="7"]
 tile_data = PoolIntArray( 1835050, 6, 0, 1900545, 4, 0, 1900546, 3, 0, 1900547, 3, 0, 1900548, 3, 0, 1900549, 3, 0, 1900550, 3, 0, 1900551, 3, 0, 1900552, 3, 0, 1900553, 3, 0, 1900554, 3, 0, 1900555, 3, 0, 1900556, 5, 0, 1900584, 6, 0 )
 
@@ -42,5 +45,7 @@ curve = SubResource( 1 )
 position = Vector2( 675, 365 )
 rotate = false
 
-[node name="KinematicBody2D" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
-Speed = 20
+[node name="MovingPlatform1" parent="Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
+Speed = 25
+
+[node name="Platforms" type="Node" parent="." index="12"]
