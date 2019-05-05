@@ -12,6 +12,8 @@ public class Player : KinematicBody2D
     [Export]
     public int Gravity;
 
+    [Export] public int Accenleration;
+
     [Signal]
     delegate void LifeChanged();
     [Signal]
@@ -24,7 +26,7 @@ public class Player : KinematicBody2D
     public string NewAnim { get; set; }
     public string Anim { get; set; }
     public State CurrentState { get; set; }
-    public Vector2 Velocity { get; set; }
+    private Vector2 _velocity = new Vector2();
     public bool KeyRight { get; set; }
     public bool KeyLeft { get; set; }
     public bool KeyJump { get; set; }
@@ -32,11 +34,17 @@ public class Player : KinematicBody2D
     public int Life { get; set; }
 
     private bool OnPlatform { get; set; }
+    private bool Friction { get; set; }
+
+    private AnimationPlayer _animationPlayer;
+    private Sprite _sprite;
 
     public override void _Ready()
     {
-        Print("loaded");
-        ChangeState(State.IDLE);
+        _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        _sprite = GetNode<Sprite>("Sprite");
+//        Print("loaded");
+//        ChangeState(State.IDLE);
     }
 
     public void Start(Vector2 startPos)
@@ -51,189 +59,108 @@ public class Player : KinematicBody2D
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+        Vector2 snap;
 
-        // exit if hurt
-        if (CurrentState == State.HURT)
-        {
-            return;
-        }
+        _velocity.y += Gravity * delta;
 
-        float newY = Velocity.y + Gravity * delta;
-
-        Velocity = new Vector2(Velocity.x, newY);
-        
         GetInput();
-        if (NewAnim != Anim)
-        {
-            Anim = NewAnim;
-            GetNode<AnimationPlayer>("AnimationPlayer").Play(Anim);
-        }
 
-        for (int i = 0; i < GetSlideCount(); i++)
-        {
-            var colliderType = GetSlideCollision(i).GetCollider();
-
-            if (colliderType is TileMap)
-            {
-                TileMap t = (TileMap) colliderType;
-                if (t.Name == "Danger")
-                {
-                    Hurt();
-                }
-            }
-
-            // test if player is stood on moving platform
-            // OnPlatform = colliderType is MovingPlatform;
-//            if (OnPlatform)
-//            {
-//                Print(CurrentState);
-//            }
-
-            if (colliderType is Enemy)
-            {
-                Enemy e = (Enemy) colliderType;
-                RectangleShape2D playerExtentY = new RectangleShape2D();
-                if (GetNode<CollisionShape2D>("CollisionShape2D").GetShape() is RectangleShape2D)
-                {
-                    playerExtentY = (RectangleShape2D) GetNode<CollisionShape2D>("CollisionShape2D").GetShape();
-                }
-
-                if (Position.y + playerExtentY.GetExtents().y < e.Position.y)
-                {
-                    if (e.HasMethod("TakeDamage"))
-                    {
-                        e.TakeDamage();
-                        Velocity = new Vector2(Velocity.x, -200);
-                    }   
-                }
-                else
-                {
-                    Hurt();
-                }
-            }
-        }
-
-        SetMoveSlide();
-    }
-
-    private void SetMoveSlide()
-    {
-        Vector2 snapVector;
-        // bool onSlope;
         if (CurrentState == State.JUMP && IsOnFloor())
         {
-            snapVector = new Vector2(0, 0);
+            snap = new Vector2(0, 0);
         }
         else
         {
-            snapVector = new Vector2(0, 40);
+            snap = new Vector2(0, 40);
         }
-        // Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up, onSlope);
-        Velocity = MoveAndSlideWithSnap(Velocity, snapVector, Vector2.Up);
-    }
 
-    public async void ChangeState(State newState)
-    {
-        CurrentState = newState;
-        switch (CurrentState)
+        if (_velocity.y != 0 && CurrentState == State.JUMP)
         {
-            case State.IDLE:
-                NewAnim = "idle";
-                break;
-            case State.RUN:
-                NewAnim = "run";
-                break;
-            case State.HURT:
-                NewAnim = "hurt";
-                Velocity = new Vector2(-100 * Mathf.Sign(Velocity.x), -200);
-                Life -= 1;
-                EmitSignal("LifeChanged", Life);
-                Timer invTimer = GetNode<Timer>("Invulnerability");
-                invTimer.Start();
-                await ToSignal(invTimer, "timeout");
-                ChangeState(State.IDLE);
-                if (Life <=0)
-                {
-                    ChangeState(State.DEAD);
-                }
-                break;
-            case State.JUMP:
-                NewAnim = "jump_up";
-                break;
-            case State.DEAD:
-                EmitSignal("Dead");
-                Hide();
-                break;
-            case State.CROUCH:
-                NewAnim = "crouch";
-                break;
-            default:
-                break;
+            ChangeState(State.JUMP);
         }
+
+        _velocity = MoveAndSlideWithSnap(_velocity, snap, Vector2.Up);
+
+        if (CurrentState == State.JUMP && IsOnFloor())
+        {
+            ChangeState(State.IDLE);
+        }
+
     }
 
     public void GetInput()
     {
-        if (CurrentState == State.HURT)
-        {
-            return;
-        }
+        bool keyJump = Input.IsActionJustPressed("ui_jump");
+        bool keyLeft = Input.IsActionPressed("ui_left");
+        bool keyRight = Input.IsActionPressed("ui_right");
 
-        KeyRight = Input.IsActionPressed("ui_right");
-        KeyLeft = Input.IsActionPressed("ui_left");
-        KeyJump = Input.IsActionPressed("ui_jump");
-        KeyCrouch = Input.IsActionPressed("ui_crouch");
-
-        Velocity = new Vector2(0, Velocity.y);
-
-        // move right
-        if (KeyRight)
-        {
-            MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
-            ChangeState(State.RUN);
-            // needed to switch the sprite direction
-            GetNode<Sprite>("Sprite").FlipH = false;
-        }
-        // move left
-        if (KeyLeft)
-        {
-            MoveCharacter(KeyCrouch, KeyRight, KeyLeft);
-            ChangeState(State.RUN);
-            GetNode<Sprite>("Sprite").FlipH = true;
-        }
-        // cancel run
-        if (Velocity.x == 0 && CurrentState == State.RUN)
+        if (!keyLeft && !keyRight && IsOnFloor())
         {
             ChangeState(State.IDLE);
+            Friction = true;
         }
-        // make player jump
-        if (KeyJump && IsOnFloor())
+        else if (keyLeft)
         {
-            ChangeState(State.JUMP);
-            Velocity = new Vector2(0, JumpSpeed);
+            ChangeState(State.RUN);
+            _sprite.FlipH = true;
+            _velocity.x = Math.Max(_velocity.x - Accenleration, -RunSpeed);
         }
-    }
+        else if (keyRight)
+        {
+            ChangeState(State.RUN);
+            _sprite.FlipH = false;
+            _velocity.x = Math.Min(_velocity.x + Accenleration, RunSpeed);
+        }
+        
+        if (IsOnFloor())
+        {
+            if (keyJump)
+            {
+                ChangeState(State.JUMP);
+                _velocity.y = JumpSpeed;    
+            }
 
-    private void MoveCharacter(bool KeyCrouch, bool KeyRight, bool KeyLeft)
-    {
-        float x;
-        int newRunSpeed;
-        if (KeyCrouch)
-        {
-            newRunSpeed =  RunSpeed / 3;
-            ChangeState(State.CROUCH);
-            NewAnim = "crouch";
+            if (Friction)
+            {
+                _velocity.x = Mathf.Lerp(_velocity.x, 0, 0.2f);
+            }
         }
         else
         {
-            newRunSpeed = RunSpeed;
+            ChangeState(State.JUMP);
+            if (Friction)
+            {
+                _velocity.x = Mathf.Lerp(_velocity.x, 0, 0.05f);
+            }
         }
-        if (KeyLeft)
+
+
+    }
+
+    public void ChangeState(State state)
+    {
+        CurrentState = state;
+        switch (state)
         {
-            newRunSpeed = newRunSpeed * -1;
+            case State.IDLE:
+                NewAnim = "idle";
+                break;
+            case State.JUMP:
+                if (_velocity.y < 0)
+                {
+                    NewAnim = "jump_up";    
+                }
+                else if (_velocity.y > 0)
+                {
+                    NewAnim = "jump_down";
+                }
+                break;
+            case State.RUN:
+                NewAnim = "run";
+                break;
+            
         }
-        x = Velocity.x + newRunSpeed;
-        Velocity = new Vector2(x, Velocity.y);
+        _animationPlayer.Play(NewAnim);
     }
 
     public void Hurt()
