@@ -70,7 +70,6 @@ public class Player : KinematicBody2D
         _velocity.y += Gravity * delta;
 
         GetInput();
-        GetCollisions();
 
         if (CurrentState == State.JUMP && IsOnFloor())
         {
@@ -87,6 +86,8 @@ public class Player : KinematicBody2D
         }
 
         _velocity = MoveAndSlideWithSnap(_velocity, snap, Vector2.Up);
+        
+        GetCollisions();
 
         if (CurrentState == State.JUMP && IsOnFloor())
         {
@@ -97,6 +98,10 @@ public class Player : KinematicBody2D
 
     private void GetCollisions()
     {
+        if (CurrentState == State.HURT)
+        {
+            return;
+        }
         for (int i = 0; i < GetSlideCount(); i++)
         {
             var collision = GetSlideCollision(i);
@@ -105,6 +110,22 @@ public class Player : KinematicBody2D
             {
                 TileMap t = (TileMap) collision.Collider;
                 if (t.Name == "Danger")
+                {
+                    Hurt();
+                }
+            }
+
+            if (collision.Collider is Enemy)
+            {
+                Enemy enemy = (Enemy) collision.Collider;
+                RectangleShape2D shape = (RectangleShape2D) enemy.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+                var playerFeet = (Position + shape.Extents).y;
+                if (playerFeet < enemy.Position.y)
+                {
+                    enemy.TakeDamage();
+                    _velocity.y = -200;
+                }
+                else
                 {
                     Hurt();
                 }
