@@ -11,8 +11,8 @@ public class Player : KinematicBody2D
     public int JumpSpeed;
     [Export]
     public int Gravity;
-
-    [Export] public int Accenleration;
+    [Export] public int Acceleration;
+    [Export] public float Invincibility;
 
     [Signal]
     delegate void LifeChanged();
@@ -38,13 +38,14 @@ public class Player : KinematicBody2D
 
     private AnimationPlayer _animationPlayer;
     private Sprite _sprite;
+    private Timer _invincibleTimer;
 
     public override void _Ready()
     {
         _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         _sprite = GetNode<Sprite>("Sprite");
-//        Print("loaded");
-//        ChangeState(State.IDLE);
+        _invincibleTimer = GetNode<Timer>("Invulnerability");
+        _invincibleTimer.WaitTime = Invincibility;
     }
 
     public void Start(Vector2 startPos)
@@ -59,11 +60,17 @@ public class Player : KinematicBody2D
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+
+        if (CurrentState == State.HURT)
+        {
+            return;
+        }
         Vector2 snap;
 
         _velocity.y += Gravity * delta;
 
         GetInput();
+        GetCollisions();
 
         if (CurrentState == State.JUMP && IsOnFloor())
         {
@@ -88,33 +95,50 @@ public class Player : KinematicBody2D
 
     }
 
+    private void GetCollisions()
+    {
+        for (int i = 0; i < GetSlideCount(); i++)
+        {
+            var collision = GetSlideCollision(i);
+
+            if (collision.Collider is TileMap)
+            {
+                TileMap t = (TileMap) collision.Collider;
+                if (t.Name == "Danger")
+                {
+                    Hurt();
+                }
+            }
+        }
+    }
+
     public void GetInput()
     {
-        bool keyJump = Input.IsActionJustPressed("ui_jump");
-        bool keyLeft = Input.IsActionPressed("ui_left");
-        bool keyRight = Input.IsActionPressed("ui_right");
+        KeyJump = Input.IsActionJustPressed("ui_jump");
+        KeyLeft = Input.IsActionPressed("ui_left");
+        KeyRight = Input.IsActionPressed("ui_right");
 
-        if (!keyLeft && !keyRight && IsOnFloor())
+        if (!KeyLeft && !KeyRight && IsOnFloor())
         {
             ChangeState(State.IDLE);
             Friction = true;
         }
-        else if (keyLeft)
+        else if (KeyLeft)
         {
             ChangeState(State.RUN);
             _sprite.FlipH = true;
-            _velocity.x = Math.Max(_velocity.x - Accenleration, -RunSpeed);
+            _velocity.x = Math.Max(_velocity.x - Acceleration, -RunSpeed);
         }
-        else if (keyRight)
+        else if (KeyRight)
         {
             ChangeState(State.RUN);
             _sprite.FlipH = false;
-            _velocity.x = Math.Min(_velocity.x + Accenleration, RunSpeed);
+            _velocity.x = Math.Min(_velocity.x + Acceleration, RunSpeed);
         }
         
         if (IsOnFloor())
         {
-            if (keyJump)
+            if (KeyJump)
             {
                 ChangeState(State.JUMP);
                 _velocity.y = JumpSpeed;    
@@ -158,7 +182,22 @@ public class Player : KinematicBody2D
             case State.RUN:
                 NewAnim = "run";
                 break;
-            
+            case State.HURT:
+                NewAnim = "hurt";
+                _velocity.y = -200;
+                _velocity.x = -100 * Mathf.Sign(_velocity.x);
+                Life -= 1;
+                EmitSignal("LifeChanged", Life);
+                _invincibleTimer.Start();
+                if (Life <= 0)
+                {
+                    ChangeState(State.DEAD);
+                }
+                break;
+            case State.DEAD:
+                EmitSignal("Dead");
+                Hide();
+                break;
         }
         _animationPlayer.Play(NewAnim);
     }
