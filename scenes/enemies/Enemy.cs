@@ -3,12 +3,11 @@ using System;
 
 public class Enemy : KinematicBody2D
 {
-    [Export()] public int Speed;
-    [Export()] public float Gravity;
+    [Export] public int Speed;
+    [Export] public float Gravity;
 
     public Vector2 Velocity { get; private set; }
     private int Facing { get; set; }
-    private int NewFacing { get; set; }
     private float NewY { get; set; }
 
     public override void _Ready()

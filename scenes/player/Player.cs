@@ -26,14 +26,13 @@ public class Player : KinematicBody2D
     public string NewAnim { get; set; }
     public string Anim { get; set; }
     public State CurrentState { get; set; }
-    private Vector2 _velocity = new Vector2();
+    private Vector2 _velocity;
     public bool KeyRight { get; set; }
     public bool KeyLeft { get; set; }
     public bool KeyJump { get; set; }
     public bool KeyCrouch { get; set; }
     public int Life { get; set; }
-
-    private bool OnPlatform { get; set; }
+    
     private bool Friction { get; set; }
 
     private AnimationPlayer _animationPlayer;
