@@ -85,6 +85,17 @@ region_rect = Rect2( 304, 16, 32, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="grassLgSlopeLeft"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassLgSlopeLeft/StaticBody2D"]
+polygon = PoolVector2Array( -16, -1, 14, -16, 16, -17, 16, 16, -16, 16 )
+
+[node name="grassLgSlopeLeftSingle" type="Sprite" parent="."]
+position = Vector2( 64, 70 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 304, 16, 32, 32 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="grassLgSlopeLeftSingle"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassLgSlopeLeftSingle/StaticBody2D"]
 polygon = PoolVector2Array( -16, -1, 14, -16, 16, -16, 16, 16, -16, 16 )
 
 [node name="grassLgSlopeRight" type="Sprite" parent="."]
@@ -97,7 +108,7 @@ region_rect = Rect2( 352, 16, 32, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="grassLgSlopeRight"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassLgSlopeRight/StaticBody2D"]
-polygon = PoolVector2Array( -14, -16, 16, -1, 16, 16, -16, 16, -16, 4, -16, -2, -16, -8, -16, -16 )
+polygon = PoolVector2Array( -14, -16, 16, -1, 16, 16, -16, 16, -16, 4, -16, -2, -16, -8, -16, -17 )
 
 [node name="grassSmSlopeLeft" type="Sprite" parent="."]
 editor/display_folded = true
@@ -109,7 +120,7 @@ region_rect = Rect2( 320, 65, 16, 31 )
 [node name="StaticBody2D" type="StaticBody2D" parent="grassSmSlopeLeft"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassSmSlopeLeft/StaticBody2D"]
-polygon = PoolVector2Array( -8, -1, 7, -16, 8, -16, 8, 4, 8, 15, 1, 15, -8, 15 )
+polygon = PoolVector2Array( -8, -1, 7, -16, 8, -17, 8, 4, 8, 15, 1, 15, -8, 15 )
 
 [node name="grassSmSlopeRight" type="Sprite" parent="."]
 editor/display_folded = true
@@ -121,7 +132,7 @@ region_rect = Rect2( 352, 65, 16, 31 )
 [node name="StaticBody2D" type="StaticBody2D" parent="grassSmSlopeRight"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassSmSlopeRight/StaticBody2D"]
-polygon = PoolVector2Array( -8, -16, -7, -16, 8, -1, 8, 4, 8, 15, 1, 15, -8, 15 )
+polygon = PoolVector2Array( -8, -17, -7, -16, 8, -1, 8, 4, 8, 15, 1, 15, -8, 15 )
 
 [node name="earthLgSlopeLeft" type="Sprite" parent="."]
 editor/display_folded = true
@@ -133,7 +144,7 @@ region_rect = Rect2( 208, 16, 32, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="earthLgSlopeLeft"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="earthLgSlopeLeft/StaticBody2D"]
-polygon = PoolVector2Array( -16, 0, 14, -15, 16, -15, 16, 4, 16, 16, 0, 16, -16, 16 )
+polygon = PoolVector2Array( -16, 0, 14, -15, 16, -16, 16, 4, 16, 16, 0, 16, -16, 16 )
 
 [node name="earthLgSlopeRight" type="Sprite" parent="."]
 editor/display_folded = true
@@ -145,10 +156,9 @@ region_rect = Rect2( 256, 16, 32, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="earthLgSlopeRight"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="earthLgSlopeRight/StaticBody2D"]
-polygon = PoolVector2Array( -16, -15, -14, -15, 16, 0, 16, 4, 16, 16, 0, 16, -16, 16 )
+polygon = PoolVector2Array( -16, -16, -14, -15, 16, 0, 16, 4, 16, 16, 0, 16, -16, 16 )
 
 [node name="earthSmSlopeLeft" type="Sprite" parent="."]
-editor/display_folded = true
 position = Vector2( -72, 64 )
 texture = ExtResource( 1 )
 region_enabled = true
@@ -157,10 +167,9 @@ region_rect = Rect2( 224, 64, 16, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="earthSmSlopeLeft"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="earthSmSlopeLeft/StaticBody2D"]
-polygon = PoolVector2Array( 7, -15, 8, -15, 8, 1, 8, 16, -8, 16, -8, 0 )
+polygon = PoolVector2Array( 7, -15, 8, -16, 8, 1, 8, 16, -8, 16, -8, 0 )
 
 [node name="earthSmSlopeRight" type="Sprite" parent="."]
-editor/display_folded = true
 position = Vector2( -117, 64 )
 texture = ExtResource( 1 )
 region_enabled = true
@@ -169,7 +178,7 @@ region_rect = Rect2( 256, 64, 16, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="earthSmSlopeRight"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="earthSmSlopeRight/StaticBody2D"]
-polygon = PoolVector2Array( -8, -15, -7, -15, 8, 0, 8, 16, 0, 16, -8, 16 )
+polygon = PoolVector2Array( -8, -16, -7, -15, 8, 0, 8, 16, 0, 16, -8, 16 )
 
 [node name="earth1" type="Sprite" parent="."]
 editor/display_folded = true
@@ -746,4 +755,3 @@ region_rect = Rect2( 177, 160, 14, 16 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="symbol/StaticBody2D"]
 polygon = PoolVector2Array( 7, 4, 3, 8, -3, 8, -7, 4, -7, -5, -4, -8, 4, -8, 7, -4 )
-
