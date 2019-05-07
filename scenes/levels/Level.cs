@@ -8,9 +8,10 @@ public class Level : Node2D
     delegate void ScoreChanged();
     [Signal]
     delegate void LifeChanged();
-    
+
     private TileMap Pickups { get; set;  }
     private Player Player { get; set; }
+    private HUD Hud { get; set; }
     private PackedScene Collectible { get; set; }
     public int Score { get; set; }
 
@@ -25,14 +26,20 @@ public class Level : Node2D
         Collectible = (PackedScene) ResourceLoader.Load("res://scenes/Collectible.tscn");
         Player = GetNode<Player>("Player");
         Pickups = GetNode<TileMap>("Pickups");
+        Hud = GetNode<HUD>("CanvasLayer/HUD");
         Pickups.Hide();
         Score = 0;
-        // EmitSignal("ScoreChanged", Score);
-        Position2D startPos = GetNode<Position2D>("PlayerSpawn");
-        GetNode<Player>("Player").Start(new Vector2(startPos.Position.x, startPos.Position.y));
 
-        Connect("ScoreChanged", GetNode<HUD>("CanvasLayer/HUD"), "_on_ScoreChanged");
-        Connect("LifeChanged", GetNode<HUD>("CanvasLayer/HUD"), "_on_Player_LifeChanged");
+        Position2D startPos = GetNode<Position2D>("PlayerSpawn");
+        
+        /* signal ScoreChanged is emitted from 2 places so needs to be connected in both places. Need
+         the Player.Connect(...) when connecting from outside Player*/
+        Connect("ScoreChanged", Hud, "_on_ScoreChanged");
+        Player.Connect("ScoreChanged", Hud, "_on_ScoreChanged");
+        Connect("LifeChanged", Hud, "_on_Player_LifeChanged");
+        Player.Connect("LifeChanged", Hud, "_on_Player_LifeChanged");
+        
+        GetNode<Player>("Player").Start(new Vector2(startPos.Position.x, startPos.Position.y));
 
         SetCameraLimits();
         SpawnPickups();
@@ -58,8 +65,8 @@ public class Level : Node2D
             {
                 GD.Print(type);
                 Collectible c = (Collectible) Collectible.Instance();
-               Vector2 pos = Pickups.MapToWorld(cell);
-               c.Init(type, pos + Pickups.CellSize / 2);
+                Vector2 pos = Pickups.MapToWorld(cell);
+                c.Init(type, pos + Pickups.CellSize / 2);
                 AddChild(c);
                 c.Connect("Pickup", this, "_on_Collectible_Pickup");
             }
@@ -76,11 +83,9 @@ public class Level : Node2D
         else if (type == "gem")
         {
             Player p = GetNode<Player>("Player");
-            
             if (p.Life < 5)
             {
-                int newLives = p.Life += 1;
-                EmitSignal("LifeChanged", p.Life);
+                EmitSignal("LifeChanged", p.Life += 1);
             }
         }
     }

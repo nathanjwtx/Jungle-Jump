@@ -32,6 +32,9 @@ tile_data = PoolIntArray( 65535, 4, 0, 2, 3, 0, 3, 5, 0, 1376280, 1, 0, 1376286,
 [node name="Objects" parent="." index="4"]
 tile_data = PoolIntArray( 1507382, 5, 0 )
 
+[node name="Pickups" parent="." index="5"]
+tile_data = PoolIntArray( 1376284, 8, 0, 1376285, 7, 0 )
+
 [node name="PlayerSpawn" parent="." index="6"]
 position = Vector2( 430, 300 )
 

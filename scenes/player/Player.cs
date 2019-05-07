@@ -18,6 +18,8 @@ public class Player : KinematicBody2D
     delegate void LifeChanged();
     [Signal]
     delegate void Dead();
+    [Signal]
+    delegate void ScoreChanged();
 
 
     public enum State
@@ -51,6 +53,7 @@ public class Player : KinematicBody2D
     {
         Life = 3;
         EmitSignal("LifeChanged", Life);
+        EmitSignal("ScoreChanged", 0);
         Position = startPos;
         Show();
         ChangeState(State.IDLE);
