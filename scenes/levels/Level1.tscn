@@ -32,7 +32,7 @@ collision_mask = 4
 tile_data = PoolIntArray( 1376284, 5, 0 )
 
 [node name="PlayerSpawn" parent="." index="6"]
-position = Vector2( 618, 340 )
+position = Vector2( 432, 327 )
 
 [node name="CanvasLayer" parent="." index="7"]
 editor/display_folded = true
@@ -49,7 +49,7 @@ Invincibility = 1.0
 editor/display_folded = true
 
 [node name="Path2D" type="Path2D" parent="Platforms" index="0"]
-position = Vector2( 0, -179 )
+position = Vector2( 158, -68 )
 curve = SubResource( 1 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Platforms/Path2D" index="0"]

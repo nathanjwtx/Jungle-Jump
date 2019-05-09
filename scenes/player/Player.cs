@@ -140,25 +140,46 @@ public class Player : KinematicBody2D
         KeyJump = Input.IsActionJustPressed("ui_jump");
         KeyLeft = Input.IsActionPressed("ui_left");
         KeyRight = Input.IsActionPressed("ui_right");
+        KeyCrouch = Input.IsActionPressed("ui_crouch");
 
-        if (!KeyLeft && !KeyRight && IsOnFloor())
+        if (!KeyLeft && !KeyRight && !KeyCrouch && IsOnFloor())
         {
             ChangeState(State.IDLE);
             Friction = true;
         }
         else if (KeyLeft)
         {
-            ChangeState(State.RUN);
             _sprite.FlipH = true;
-            _velocity.x = Math.Max(_velocity.x - Acceleration, -RunSpeed);
+            if (!KeyCrouch)
+            {
+                ChangeState(State.RUN);
+                _velocity.x = Math.Max(_velocity.x - Acceleration, -RunSpeed);    
+            }
+            else if (KeyCrouch)
+            {
+                _velocity.x = Math.Max(_velocity.x - Acceleration, -RunSpeed / 2f);
+            }
+            
         }
         else if (KeyRight)
         {
-            ChangeState(State.RUN);
             _sprite.FlipH = false;
-            _velocity.x = Math.Min(_velocity.x + Acceleration, RunSpeed);
+            if (!KeyCrouch)
+            {
+                ChangeState(State.RUN);
+                _velocity.x = Math.Min(_velocity.x + Acceleration, RunSpeed);                
+            }
+            else if (KeyCrouch)
+            {
+                _velocity.x = Math.Min(_velocity.x + Acceleration, RunSpeed / 2f);
+            }
+
         }
-        
+
+        if (KeyCrouch)
+        {
+            ChangeState(State.CROUCH);
+        }
         if (IsOnFloor())
         {
             if (KeyJump)
@@ -216,6 +237,9 @@ public class Player : KinematicBody2D
                 {
                     ChangeState(State.DEAD);
                 }
+                break;
+            case State.CROUCH:
+                NewAnim = "crouch";
                 break;
             case State.DEAD:
                 EmitSignal("Dead");
