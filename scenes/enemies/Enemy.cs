@@ -44,7 +44,7 @@ public class Enemy : KinematicBody2D
 //            _rayCast2DLeft.Enabled = true;
 //            _rayCast2DRight.Enabled = false;
 //        }
-        
+
         for (int i = 0; i < GetSlideCount(); i++)
         {
             var colliderType = GetSlideCollision(i).GetCollider();
@@ -52,13 +52,13 @@ public class Enemy : KinematicBody2D
             if (colliderType is Player p)
             {
                 p.Hurt();
+                Facing *= -1;
             }
 
             if (colliderType is TileMap t)
             {
                 if (t.Name == "Blocks")
                 {
-                    GD.Print(t.Name);
                     Facing *= -1;
                 }
             }
