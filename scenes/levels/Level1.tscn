@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/levels/Level.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/enemies/Enemy.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/platforms/MovingPlatform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/platforms/MovingPlatform.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/enemies/Enemy.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -12,7 +12,7 @@ _data = {
 [node name="Level" index="0" instance=ExtResource( 1 )]
 
 [node name="ParallaxBackground" parent="." index="0"]
-editor/display_folded = true
+editor/display_folded = false
 
 [node name="ParallaxLayer" parent="ParallaxBackground" index="0"]
 position = Vector2( -4, 0 )
@@ -21,34 +21,35 @@ position = Vector2( -4, 0 )
 position = Vector2( 435.599, 363.647 )
 
 [node name="World" parent="." index="1"]
-tile_data = PoolIntArray( 1441816, 0, 0, 1441817, 0, 0, 1441818, 0, 0, 1441819, 0, 0, 1441820, 0, 0, 1441821, 0, 0, 1441822, 0, 0, 1441823, 0, 0, 1572897, 0, 0, 1572898, 0, 0, 1572899, 0, 0, 1572900, 0, 0, 1572901, 0, 0, 1572902, 0, 0, 1572903, 0, 0, 1572904, 0, 0, 1572915, 4, 0, 1572916, 3, 0, 1572917, 2, 0, 1572918, 3, 0, 1572919, 2, 0, 1572920, 3, 0, 1572921, 5, 0 )
+tile_data = PoolIntArray( 1245233, 6, 0, 1310767, 16, 0, 1376301, 16, 0, 1441816, 0, 0, 1441817, 0, 0, 1441818, 0, 0, 1441819, 0, 0, 1441820, 0, 0, 1441821, 0, 0, 1441822, 0, 0, 1441823, 0, 0, 1441835, 16, 0, 1507369, 16, 0, 1572897, 0, 0, 1572898, 0, 0, 1572899, 0, 0, 1572900, 0, 0, 1572901, 0, 0, 1572902, 0, 0, 1572903, 0, 0, 1572904, 0, 0, 1572915, 4, 0, 1572916, 3, 0, 1572917, 2, 0, 1572918, 3, 0, 1572919, 2, 0, 1572920, 3, 0, 1572921, 5, 0 )
 
-[node name="Slopes" parent="." index="2"]
-tile_data = PoolIntArray( 1507369, 6, 0, 1507371, 3, 0, 1507372, 3, 0, 1507373, 3, 0, 1507374, 3, 0, 1507375, 3, 0, 1507376, 3, 0, 1507377, 3, 0, 1507378, 3, 0 )
+[node name="Danger" parent="." index="2"]
+tile_data = PoolIntArray(  )
 
-[node name="Danger" parent="." index="3"]
-tile_data = PoolIntArray( 65535, 4, 0, 2, 3, 0, 3, 5, 0, 1376280, 1, 0, 1376286, 1, 0, 1507361, 1, 0, 2359301, 1, 0, 2359302, 1, 0, 2359303, 1, 0, 2359304, 1, 0, 2359305, 1, 0, 2359306, 1, 0, 2359307, 1, 0, 2359308, 1, 0, 2359309, 1, 0, 2359310, 1, 0, 2359311, 1, 0, 2359312, 1, 0, 2359313, 1, 0, 2359314, 1, 0, 2359315, 1, 0, 2359316, 1, 0, 2359317, 1, 0 )
+[node name="Blocks" parent="." index="3"]
+tile_data = PoolIntArray( 1376279, 55, 0, 1376288, 55, 0 )
 
 [node name="Objects" parent="." index="4"]
-tile_data = PoolIntArray( 1507382, 5, 0 )
-
-[node name="Pickups" parent="." index="5"]
-tile_data = PoolIntArray( 1376284, 8, 0, 1376285, 7, 0 )
+collision_layer = 32
+collision_mask = 4
+tile_data = PoolIntArray( 1376284, 5, 0 )
 
 [node name="PlayerSpawn" parent="." index="6"]
-position = Vector2( 430, 300 )
+position = Vector2( 602, 340 )
 
-[node name="Player" parent="." index="7"]
-Acceleration = 25
-Invincibility = 1.0
-
-[node name="Enemy" parent="." index="8" instance=ExtResource( 2 )]
-position = Vector2( 564.634, 345.634 )
-
-[node name="CanvasLayer" parent="." index="10"]
+[node name="CanvasLayer" parent="." index="7"]
 editor/display_folded = true
 
-[node name="Platforms" type="Node" parent="." index="11"]
+[node name="Door" parent="." index="8"]
+position = Vector2( 974.793, 327.139 )
+
+[node name="Player" parent="." index="9"]
+RunSpeed = 100
+Acceleration = 25
+Invincibility = 2.0
+
+[node name="Platforms" type="Node" parent="." index="10"]
+editor/display_folded = true
 
 [node name="Path2D" type="Path2D" parent="Platforms" index="0"]
 position = Vector2( 0, -179 )
@@ -58,8 +59,8 @@ curve = SubResource( 1 )
 position = Vector2( 675, 365 )
 rotate = false
 
-[node name="MovingPlatform1" parent="Platforms/Path2D/PathFollow2D" index="0" instance=ExtResource( 3 )]
+[node name="MovingPlatform1" parent="Platforms/Path2D/PathFollow2D" index="0" instance=ExtResource( 2 )]
 Speed = 25
 
-[node name="Door" parent="." index="12"]
-position = Vector2( 974.793, 327.139 )
+[node name="Enemy" parent="." index="11" instance=ExtResource( 3 )]
+position = Vector2( 421, 338 )

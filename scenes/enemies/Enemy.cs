@@ -10,9 +10,14 @@ public class Enemy : KinematicBody2D
     private int Facing { get; set; }
     private float NewY { get; set; }
 
+    private RayCast2D _rayCast2DLeft;
+    private RayCast2D _rayCast2DRight;
+
     public override void _Ready()
     {
-        Facing = 1;
+        Facing = -1;
+        _rayCast2DLeft = GetNode<RayCast2D>("RayCast_Left");
+        _rayCast2DRight = GetNode<RayCast2D>("RayCast_Right");
     }
 
     public override void _PhysicsProcess(float delta)
@@ -24,7 +29,22 @@ public class Enemy : KinematicBody2D
         Velocity = new Vector2(Facing * Speed, NewY);
 
         Velocity = MoveAndSlide(Velocity, new Vector2(0, -1));
-
+        
+        
+//        GD.Print(_rayCast2DLeft.IsColliding());
+//        if (_rayCast2DLeft.IsColliding() && Facing == -1)
+//        {
+//            Facing = 1;
+//            _rayCast2DLeft.Enabled = false;
+//            _rayCast2DRight.Enabled = true;
+//        }
+//        else if (_rayCast2DRight.IsColliding() && Facing == 1)
+//        {
+//            Facing = -1;
+//            _rayCast2DLeft.Enabled = true;
+//            _rayCast2DRight.Enabled = false;
+//        }
+        
         for (int i = 0; i < GetSlideCount(); i++)
         {
             var colliderType = GetSlideCollision(i).GetCollider();
@@ -36,13 +56,15 @@ public class Enemy : KinematicBody2D
 
             if (colliderType is TileMap t)
             {
-                if (t.Name == "Slopes" || GetSlideCollision(i).Normal.x != 0)
+                if (t.Name == "Blocks")
                 {
+                    GD.Print(t.Name);
                     Facing *= -1;
-                    Velocity = new Vector2(Velocity.x, -100);
                 }
             }
         }
+        
+        
 
         if (Position.y > 1000)
         {

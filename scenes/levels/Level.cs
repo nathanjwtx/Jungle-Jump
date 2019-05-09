@@ -10,6 +10,7 @@ public class Level : Node2D
     delegate void LifeChanged();
 
     private TileMap Pickups { get; set;  }
+    private TileMap Blocks { get; set; }
     private Player Player { get; set; }
     private HUD Hud { get; set; }
     private PackedScene Collectible { get; set; }
@@ -26,8 +27,10 @@ public class Level : Node2D
         Collectible = (PackedScene) ResourceLoader.Load("res://scenes/Collectible.tscn");
         Player = GetNode<Player>("Player");
         Pickups = GetNode<TileMap>("Pickups");
+        Blocks = GetNode<TileMap>("Blocks");
         Hud = GetNode<HUD>("CanvasLayer/HUD");
         Pickups.Hide();
+        Blocks.Hide();
         Score = 0;
 
         Position2D startPos = GetNode<Position2D>("PlayerSpawn");

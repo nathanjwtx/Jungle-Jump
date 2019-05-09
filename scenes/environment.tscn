@@ -76,7 +76,6 @@ region_rect = Rect2( 304, 224, 16, 16 )
 polygon = PoolVector2Array( -8, -8, 8, -8, 8, 2, 7, 4, 4, 6, 0, 8, -8, 8 )
 
 [node name="grassLgSlopeLeft" type="Sprite" parent="."]
-editor/display_folded = true
 position = Vector2( 64, 30 )
 texture = ExtResource( 1 )
 region_enabled = true
@@ -96,7 +95,7 @@ region_rect = Rect2( 304, 16, 32, 32 )
 [node name="StaticBody2D" type="StaticBody2D" parent="grassLgSlopeLeftSingle"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="grassLgSlopeLeftSingle/StaticBody2D"]
-polygon = PoolVector2Array( -16, -1, 14, -16, 16, -16, 16, 16, -16, 16 )
+polygon = PoolVector2Array( -16, 0, 16, -16, 16, -16, 16, 16, -16, 16 )
 
 [node name="grassLgSlopeRight" type="Sprite" parent="."]
 editor/display_folded = true
